@@ -91,15 +91,19 @@ const handler = NextAuth({
       id: "airtable",
       name: "Airtable",
       type: "oauth",
-      wellKnown: "https://airtable.com/.well-known/openid-configuration",
       authorization: {
+        url: "https://airtable.com/oauth2/v1/authorize",
         params: {
+          client_id: process.env.AIRTABLE_CLIENT_ID,
+          response_type: "code",
+          redirect_uri: process.env.AIRTABLE_REDIRECT_URI,
           scope:
             "data.records:read data.records:write schema.bases:read schema.bases:write",
         },
       },
+      token: "https://api.airtable.com/oauth2/v1/token",
+      userinfo: "https://api.airtable.com/oauth2/v1/userinfo",
       idToken: true,
-      checks: ["pkce", "state"],
       profile(profile) {
         return {
           id: profile.sub,

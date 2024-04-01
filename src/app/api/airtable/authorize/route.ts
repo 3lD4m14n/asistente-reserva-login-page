@@ -10,6 +10,11 @@ export async function GET() {
   const codeVerifier = generateCodeVerifier();
   const codeChallenge = encodeToBase64UrlSha256(codeVerifier);
 
+  //imprimir por consola el client_id de airtable y el redirect_uri
+  console.log("client_id de airtable: ");
+  console.log(process.env.AIRTABLE_CLIENT_ID);
+  console.log(process.env.AIRTABLE_REDIRECT_URI);
+
   const airtableResponse = await axios.get(
     "https://airtable.com/oauth2/v1/authorize",
     {
