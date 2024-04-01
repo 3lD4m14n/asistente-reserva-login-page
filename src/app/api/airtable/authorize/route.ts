@@ -26,9 +26,18 @@ export async function GET() {
     },
   );
 
-  if (airtableResponse.data.state !== state || airtableResponse.data.code_challenge !== codeChallenge) {
+  if (
+    airtableResponse.data.state !== state ||
+    airtableResponse.data.code_challenge !== codeChallenge
+  ) {
     return new Response("Error", { status: 500 });
   }
 
-  return new Response(airtableResponse.data.code);
+  return new Response(
+    JSON.stringify({
+      code: airtableResponse.data.code,
+      code_verifier: codeVerifier,
+    }),
+    { status: 200 },
+  );
 }
