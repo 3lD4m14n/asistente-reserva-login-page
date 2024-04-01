@@ -51,14 +51,16 @@ const handler = NextAuth({
           .then((res) => res.data.rows[0]);
 
         assistantType = "servicio";
-      } 
+      }
       console.log("obtenida informacion del usuario: ", clientRow);
 
       clientRow.RefreshToken = token.refreshToken;
       clientRow["Personal Access Token"] = token.accessToken;
 
       session.userInfo = clientRow;
-      session.assistantType = Object.keys( assistantType ) ? assistantType : "No Registrado";
+      session.assistantType = Object.keys(assistantType)
+        ? assistantType
+        : "No Registrado";
 
       console.log("actualizando del usuario: ", session.user?.email);
       await axios.put(
@@ -85,6 +87,28 @@ const handler = NextAuth({
         },
       },
     }),
+    {
+      id: "airtable",
+      name: "Airtable",
+      type: "oauth",
+      wellKnown: "https://airtable.com/.well-known/openid-configuration",
+      authorization: {
+        params: {
+          scope:
+            "data.records:read data.records:write schema.bases:read schema.bases:write",
+        },
+      },
+      idToken: true,
+      checks: ["pkce", "state"],
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
+    },
   ],
   secret: process.env.NEXTAUTH_SECRET,
 });
