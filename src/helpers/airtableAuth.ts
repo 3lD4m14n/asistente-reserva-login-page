@@ -16,7 +16,7 @@ export default async function airtableAuth() {
     body,
     {
       params: {
-        Authorization: `Basic ${process.env.AIRTABLE_CLIENT_ID}:${process.env.AIRTABLE_CLIENT_SECRET}`,
+        Authorization: `Basic ${process.env.NEXT_PUBLIC_AIRTABLE_CLIENT_ID}:${process.env.NEXT_PUBLIC_AIRTABLE_CLIENT_SECRET}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     },

@@ -94,15 +94,15 @@ const handler = NextAuth({
       authorization: {
         url: "https://airtable.com/oauth2/v1/authorize",
         params: {
-          client_id: process.env.AIRTABLE_CLIENT_ID,
+          client_id: process.env.NEXT_PUBLIC_AIRTABLE_CLIENT_ID,
           response_type: "code",
           redirect_uri: process.env.AIRTABLE_REDIRECT_URI,
           scope:
             "data.records:read data.records:write schema.bases:read schema.bases:write",
+          code_challenge_method: "S256"
         },
       },
       token: "https://api.airtable.com/oauth2/v1/token",
-      userinfo: "https://api.airtable.com/oauth2/v1/userinfo",
       idToken: true,
       profile(profile) {
         return {
@@ -112,7 +112,33 @@ const handler = NextAuth({
           image: profile.picture,
         };
       },
-    },
+    }
+    // {
+    //   id: "airtable",
+    //   name: "Airtable",
+    //   type: "oauth",
+    //   authorization: {
+    //     url: "https://airtable.com/oauth2/v1/authorize",
+    //     params: {
+    //       client_id: process.env.NEXT_PUBLIC_AIRTABLE_CLIENT_ID,
+    //       response_type: "code",
+    //       redirect_uri: process.env.AIRTABLE_REDIRECT_URI,
+    //       scope:
+    //         "data.records:read data.records:write schema.bases:read schema.bases:write",
+    //     },
+    //   },
+    //   token: "https://api.airtable.com/oauth2/v1/token",
+    //   userinfo: "https://api.airtable.com/oauth2/v1/userinfo",
+    //   idToken: true,
+    //   profile(profile) {
+    //     return {
+    //       id: profile.sub,
+    //       name: profile.name,
+    //       email: profile.email,
+    //       image: profile.picture,
+    //     };
+    //   },
+    // },
   ],
   secret: process.env.NEXTAUTH_SECRET,
 });
