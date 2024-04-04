@@ -3,7 +3,7 @@ import { Session } from "inspector";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import airtableAuth from "@/helpers/airtableAuth";
+import { airtableOauthClient } from "@/helpers/airtableAuthClient";
 
 type InputData = {
   rubro: string;
@@ -49,13 +49,38 @@ type UserSession = Session & {
   assistantType: "servicio" | "consumo";
 };
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  params: any;
+  searchParams:
+    | {
+        code: string;
+        state: string;
+        code_challenge: string;
+        code_challenge_method: string;
+      }
+    | undefined;
+}) {
   const datos = useSession();
   const session = datos.data as UserSession | null;
+  let tokens;
 
   useEffect(() => {
     console.log(datos);
   }, [datos]);
+
+  useEffect(() => {
+    if (!searchParams?.code || !searchParams?.code_challenge) return;
+
+    const getTokens = async () => {
+      await airtableOauthClient.receiveCode();
+      tokens = await airtableOauthClient.getTokens();
+      console.log(tokens);
+    };
+
+    getTokens();
+  }, [searchParams]);
 
   return (
     <div className="bg-gradient-to-b from-gray-200 to-gray-300 min-h-screen flex justify-center items-center">
@@ -103,7 +128,13 @@ function FormData({}) {
 
   return (
     <>
-      <button onClick={airtableAuth}>Habilitar Airtable</button>
+      <button
+        onClick={async () => {
+          await airtableOauthClient.requestAuthorizationCode();
+        }}
+      >
+        Habilitar Airtable
+      </button>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>
           Rubro:
