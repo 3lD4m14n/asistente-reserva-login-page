@@ -13,11 +13,9 @@ const handler = NextAuth({
       }
       return token;
     },
-    async session({ session, token }) {
-      // Send properties to the client, like an access_token and user id from a provider.
+    async session({ session, token }: { session: any; token: any }) {
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
-
       console.log("obteniendo informacion del usuario: ", session.user?.email);
       let clientRow = await axios
         .post(
