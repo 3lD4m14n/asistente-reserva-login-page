@@ -1,12 +1,7 @@
 import axios from "axios";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-
-const headersForBotpress = {
-  "Content-type": "application/json",
-  "x-bot-id": process.env.BOTPRESS_BOT_ID,
-  Authorization: `Bearer ${process.env.BOTPRESS_TOKEN}`,
-};
+import { headersForBotpress } from "@/helpers/headersForBotpress";
 
 const handler = NextAuth({
   callbacks: {
@@ -113,32 +108,6 @@ const handler = NextAuth({
         };
       },
     }
-    // {
-    //   id: "airtable",
-    //   name: "Airtable",
-    //   type: "oauth",
-    //   authorization: {
-    //     url: "https://airtable.com/oauth2/v1/authorize",
-    //     params: {
-    //       client_id: process.env.NEXT_PUBLIC_AIRTABLE_CLIENT_ID,
-    //       response_type: "code",
-    //       redirect_uri: process.env.AIRTABLE_REDIRECT_URI,
-    //       scope:
-    //         "data.records:read data.records:write schema.bases:read schema.bases:write",
-    //     },
-    //   },
-    //   token: "https://api.airtable.com/oauth2/v1/token",
-    //   userinfo: "https://api.airtable.com/oauth2/v1/userinfo",
-    //   idToken: true,
-    //   profile(profile) {
-    //     return {
-    //       id: profile.sub,
-    //       name: profile.name,
-    //       email: profile.email,
-    //       image: profile.picture,
-    //     };
-    //   },
-    // },
   ],
   secret: process.env.NEXTAUTH_SECRET,
 });
