@@ -1,86 +1,17 @@
 "use client";
-import { Session } from "inspector";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { airtableOauthClient } from "@/helpers/airtableAuthClient";
+import { UserSession, InputData } from "@/types";
 
-type InputData = {
-  rubro: string;
-  nombreTienda: string;
-  horario: string;
-  comportamientoAsistente: string;
-};
-
-type userInfo = {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  AssistantID: string;
-  "Personalizacion del Asistente": InputData;
-  "Personal Access Token": string;
-  RefreshToken: string;
-  BaseClientesID: string;
-  ConversacionesIniciadas: number;
-  Email: string;
-};
-
-type userInfoServicio = userInfo & {
-  WorkspaceID: string;
-  BaseAgendaID: string;
-  BaseServiciosID: string;
-  BaseEmpleadosID: string;
-};
-
-type userInfoConsumo = userInfoServicio & {
-  BasePedidosID: string;
-  BaseProductosID: string;
-};
-
-type UserSession = Session & {
-  accessToken: string;
-  refreshToken: string;
-  user: {
-    name: string;
-    email: string;
-    image: string;
-  };
-  userInfo: userInfoServicio | userInfoConsumo;
-  assistantType: "servicio" | "consumo";
-};
-
-export default function Home({
-  searchParams,
-}: {
-  params: any;
-  searchParams:
-    | {
-        code: string;
-        state: string;
-        code_challenge: string;
-        code_challenge_method: string;
-      }
-    | undefined;
-}) {
+export default function Home() {
   const datos = useSession();
   const session = datos.data as UserSession | null;
-  let tokens;
 
   useEffect(() => {
     console.log(datos);
   }, [datos]);
-
-  useEffect(() => {
-    if (!searchParams?.code || !searchParams?.code_challenge) return;
-
-    const getTokens = async () => {
-      await airtableOauthClient.receiveCode();
-      tokens = await airtableOauthClient.getTokens();
-      console.log(tokens);
-    };
-
-    getTokens();
-  }, [searchParams]);
 
   return (
     <div className="bg-gradient-to-b from-gray-200 to-gray-300 min-h-screen flex justify-center items-center">
