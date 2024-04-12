@@ -7,7 +7,7 @@ export type InputData = {
   comportamientoAsistente: string;
 };
 
-type userInfo = {
+export type userInfo = {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -32,6 +32,8 @@ type userInfoConsumo = userInfoServicio & {
   BaseProductosID: string;
 };
 
+export type AssistantType = "Servicio" | "Consumo";
+
 export interface UserSession extends Session {
   accessToken: string;
   refreshToken: string;
@@ -41,5 +43,5 @@ export interface UserSession extends Session {
     image: string;
   };
   userInfo: userInfoServicio | userInfoConsumo;
-  assistantType: "servicio" | "consumo";
+  assistantType: AssistantType;
 };
