@@ -29,7 +29,7 @@ const handler = NextAuth({
         )
         .then((res) => res.data.rows[0]);
 
-      let assistantType = "consumo";
+      let assistantType = "Consumo";
       if (!clientRow || !Object.keys(clientRow).length) {
         clientRow = await axios
           .post(
@@ -43,7 +43,7 @@ const handler = NextAuth({
           )
           .then((res) => res.data.rows[0]);
 
-        assistantType = "servicio";
+        assistantType = "Servicio";
       }
       console.log("obtenida informacion del usuario: ", clientRow);
 
