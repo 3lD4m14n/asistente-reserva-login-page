@@ -26,7 +26,7 @@ function FormData({
   assistantType: AssistantType;
 }) {
   const inputData = userData["Personalizacion del Asistente"];
-  const { handleSubmit, register} = useForm<InputData>();
+  const { handleSubmit, register } = useForm<InputData>();
 
   const onSubmit: SubmitHandler<InputData> = (data) => {
     let newRow = JSON.parse(JSON.stringify(userData));
@@ -53,28 +53,44 @@ function FormData({
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col bg-gray-200 p-4 rounded-lg gap-2"
     >
+      <button
+        onClick={async () => {
+          const airtableOauthClient = createAirtableOauthClient();
+          await airtableOauthClient.requestAuthorizationCode();
+        }}
+      >
+        Habilitar Airtable
+      </button>
       <Label>
         Rubro:
-        <input className="text-black bg-gray-100 w-full rounded-lg p-1"
-          {...register("rubro")} value={inputData.rubro}
+        <input
+          className="text-black bg-gray-100 w-full rounded-lg p-1"
+          {...register("rubro")}
+          value={inputData.rubro}
         />
       </Label>
       <Label>
         Nombre de la tienda:
-        <input className="text-black bg-gray-100 w-full rounded-lg p-1"
-          {...register("nombreTienda")} value={inputData.nombreTienda}
+        <input
+          className="text-black bg-gray-100 w-full rounded-lg p-1"
+          {...register("nombreTienda")}
+          value={inputData.nombreTienda}
         />
       </Label>
       <Label>
         Horario:
-        <input className="text-black bg-gray-100 w-full rounded-lg p-1"
-          {...register("horario")} value={inputData.horario}
+        <input
+          className="text-black bg-gray-100 w-full rounded-lg p-1"
+          {...register("horario")}
+          value={inputData.horario}
         />
       </Label>
       <Label>
         Comportamiento del asistente:
-        <input className="text-black bg-gray-100 w-full rounded-lg p-1"
-          {...register("comportamientoAsistente")} value={inputData.comportamientoAsistente}
+        <input
+          className="text-black bg-gray-100 w-full rounded-lg p-1"
+          {...register("comportamientoAsistente")}
+          value={inputData.comportamientoAsistente}
         />
       </Label>
       <div className="flex justify-center">
