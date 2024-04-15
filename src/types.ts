@@ -20,14 +20,14 @@ export type userInfo = {
   Email: string;
 };
 
-type userInfoServicio = userInfo & {
+export type userInfoServicio = userInfo & {
   WorkspaceID: string;
   BaseAgendaID: string;
   BaseServiciosID: string;
   BaseEmpleadosID: string;
 };
 
-type userInfoConsumo = userInfoServicio & {
+export type userInfoConsumo = userInfo & {
   BasePedidosID: string;
   BaseProductosID: string;
 };
