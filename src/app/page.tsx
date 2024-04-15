@@ -1,9 +1,8 @@
 "use client";
+import { UserSession } from "@/types";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { airtableOauthClient } from "@/helpers/airtableAuthClient";
-import { UserSession, InputData } from "@/types";
+import { Consumo, Servicio } from "@/components/Forms";
 
 export default function Home() {
   const datos = useSession();
@@ -28,8 +27,14 @@ export default function Home() {
                 {session.user.name}
               </p>
             </div>
-            {session.assistantType === "consumo" && <Consumo />}
-            {session.assistantType === "servicio" && <Servicio />}
+            {session.assistantType === "Consumo" &&
+              "BasePedidosID" in session.userInfo && (
+                <Consumo userData={session.userInfo} />
+              )}
+            {session.assistantType === "Servicio" &&
+              "BaseAgendaID" in session.userInfo && (
+                <Servicio userData={session.userInfo} />
+              )}
             <button
               className={"bg-red-500 rounded-md"}
               onClick={() => signOut()}
@@ -46,63 +51,6 @@ export default function Home() {
           </button>
         )}
       </div>
-    </div>
-  );
-}
-
-function FormData({}) {
-  const { handleSubmit, register } = useForm<InputData>();
-
-  const onSubmit: SubmitHandler<InputData> = (data) => {
-    console.log(data);
-  };
-
-  return (
-    <>
-      <button
-        onClick={async () => {
-          await airtableOauthClient.requestAuthorizationCode();
-        }}
-      >
-        Habilitar Airtable
-      </button>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>
-          Rubro:
-          <input type="text" {...register("rubro")} />
-        </label>
-        <label>
-          Nombre de la tienda:
-          <input type="text" {...register("nombreTienda")} />
-        </label>
-        <label>
-          Horario:
-          <input type="text" {...register("horario")} />
-        </label>
-        <label>
-          Comportamiento del asistente:
-          <input type="text" {...register("comportamientoAsistente")} />
-        </label>
-        <input type="submit" />
-      </form>
-    </>
-  );
-}
-
-function Consumo({}) {
-  return (
-    <div className="text-black">
-      <p>Consumo</p>
-      <FormData />
-    </div>
-  );
-}
-
-function Servicio({}) {
-  return (
-    <div className="text-black">
-      <p>Servicio</p>
-      <button>Habilitar Airtable</button>
     </div>
   );
 }
