@@ -1,5 +1,5 @@
 "use client";
-import { airtableOauthClient } from "@/helpers/airtableAuthClient";
+import { createAirtableOauthClient } from "@/helpers/airtableAuthClient";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
@@ -15,17 +15,24 @@ export default function AirtableAuth({
       }
     | undefined;
 }) {
-  const getTokens = async () => {
-    await airtableOauthClient.receiveCode();
-    const tokens = await airtableOauthClient.getTokens();
-    console.log(tokens);
-    //redirect("/");
-  };
-  useEffect(() => {
-    getTokens();
-  }, [searchParams]);
+  if (!searchParams) {
+    redirect("/");
+  }
 
-  return <>
-    <h1>Enviando credenciales</h1>
-  </>;
+  useEffect(() => {
+    const getTokens = async () => {
+      const airtableOauthClient = createAirtableOauthClient();
+      await airtableOauthClient.receiveCode();
+      const tokens = await airtableOauthClient.getTokens();
+      console.log(tokens);
+      //redirect("/");
+    };
+    getTokens();
+  }, []);
+
+  return (
+    <>
+      <h1>Enviando credenciales</h1>
+    </>
+  );
 }
