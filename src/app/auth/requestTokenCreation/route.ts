@@ -37,8 +37,10 @@ export async function GET(req: NextRequest) {
         )
         .then((response) => response.data[0]);
 
-      row.access_token = data.access_token;
-      row.refresh_token = data.refresh_token;
+      console.log("data:\n",data,"row:\n",row);
+
+      row["Personal Access Token"] = data.access_token;
+      row["Refresh Token"] = data.refresh_token;
 
       axios.put(
         `https://api.botpress.cloud/v1/tables/${cookiesStore.get("tableName")}/rows`,
