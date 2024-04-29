@@ -1,4 +1,3 @@
-import { createAirtableOauthClient } from "@/helpers/airtableAuthClient";
 import {
   AssistantType,
   InputData,
@@ -53,14 +52,7 @@ function FormData({
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col bg-gray-200 p-4 rounded-lg gap-2"
     >
-      <button
-        onClick={async () => {
-          const airtableOauthClient = createAirtableOauthClient();
-          await airtableOauthClient.requestAuthorizationCode();
-        }}
-      >
-        Habilitar Airtable
-      </button>
+      <a href="/auth/requestAuthorization">Habilitar Airtable</a>
       <Label>
         Rubro:
         <input
@@ -121,14 +113,7 @@ export function Servicio({ userData }: { userData: userInfoServicio }) {
   return (
     <div className="text-black">
       <p>Servicio</p>
-      <button
-        onClick={async () => {
-          const airtableOauthClient = createAirtableOauthClient();
-          await airtableOauthClient.requestAuthorizationCode();
-        }}
-      >
-        Habilitar Airtable
-      </button>
+      <button onClick={async () => {}}>Habilitar Airtable</button>
     </div>
   );
 }

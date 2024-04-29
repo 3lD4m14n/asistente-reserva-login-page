@@ -1,7 +1,7 @@
 "use client";
-import { createAirtableOauthClient } from "@/helpers/airtableAuthClient";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
+import axios from "axios";
 
 export default function AirtableAuth({
   searchParams,
@@ -21,9 +21,9 @@ export default function AirtableAuth({
 
   useEffect(() => {
     const getTokens = async () => {
-      const airtableOauthClient = createAirtableOauthClient();
-      await airtableOauthClient.receiveCode();
-      const tokens = await airtableOauthClient.getTokens();
+      const tokens = await axios.get("/auth/requestTokenCreation", {
+        params: searchParams,
+      });
       console.log(tokens);
       //redirect("/");
     };
