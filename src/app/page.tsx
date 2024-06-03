@@ -9,7 +9,7 @@ export default function Home() {
   const session = datos.data as UserSession | null;
 
   useEffect(() => {
-    console.log(datos);
+    console.log("datos", datos);
   }, [datos]);
 
   return (

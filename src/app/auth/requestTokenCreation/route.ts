@@ -1,9 +1,12 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { headersForBotpress } from "@/helpers/headersForBotpress";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth/next";
 import QueryString from "qs";
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest, res: NextResponse) {
   const searchParams = req.nextUrl.searchParams;
   const cookiesStore = cookies();
   const data = {
@@ -13,9 +16,9 @@ export async function GET(req: NextRequest) {
     grant_type: "authorization_code",
     code_verifier: cookiesStore.get("code_verifier")?.value,
   };
+  const session = await getServerSession(authOptions);
   const formattedData = QueryString.stringify(data);
 
-  //TODO: Por fin funciono, solo falta guardarlo
   //nombre de la variable: access_token
   //nombre de la variable: refresh_token
   axios
@@ -28,26 +31,34 @@ export async function GET(req: NextRequest) {
     .then(async (data) => {
       let row = await axios
         .post(
-          `https://api.botpress.cloud/v1/tables/${cookiesStore.get("tableName")}/rows/find`,
+          `https://api.botpress.cloud/v1/tables/${cookiesStore.get("tableName")?.value}/rows/find`,
           {
             filter: {
-              PhoneID: 123,
+              Email: session?.user?.email,
             },
           },
+          {
+            headers: headersForBotpress,
+          },
         )
-        .then((response) => response.data[0]);
+        .then((response) => response.data.rows[0]);
 
-      console.log("data:\n",data,"row:\n",row);
+      console.log("data Tokens:\n", data, "row:\n", row);
+      console.log(cookiesStore.get("tableName")?.value);
 
       row["Personal Access Token"] = data.access_token;
-      row["Refresh Token"] = data.refresh_token;
+      row["RefreshToken"] = data.refresh_token;
+
+      console.log("row:\n", row);
 
       axios.put(
-        `https://api.botpress.cloud/v1/tables/${cookiesStore.get("tableName")}/rows`,
-        [row],
+        `https://api.botpress.cloud/v1/tables/${cookiesStore.get("tableName")?.value}/rows`,
+        { rows: [row] },
+        {
+          headers: headersForBotpress,
+        },
       );
     });
 
-  //return NextResponse.redirect(process.env.VERCEL_URL as string);
-  return new Response("OK", { status: 200 });
+  return NextResponse.redirect(new URL("/", req.url));
 }

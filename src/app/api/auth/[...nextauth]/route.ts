@@ -2,8 +2,9 @@ import axios from "axios";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { headersForBotpress } from "@/helpers/headersForBotpress";
+import type { NextAuthOptions } from "next-auth";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
@@ -16,13 +17,13 @@ const handler = NextAuth({
     async session({ session, token }: { session: any; token: any }) {
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
-      console.log("obteniendo informacion del usuario: ", session.user?.email);
+      console.log("obteniendo informacion del usuario: ", session.user.email);
       let clientRow = await axios
         .post(
           "https://api.botpress.cloud/v1/tables/UsersConsumoTable/rows/find",
           {
             filter: {
-              Email: session.user?.email,
+              Email: session.user.email,
             },
           },
           { headers: headersForBotpress },
@@ -30,7 +31,7 @@ const handler = NextAuth({
         .then((res) => res.data.rows[0]);
 
       let assistantType = "Consumo";
-      if (!clientRow || !Object.keys(clientRow).length) {
+      if (!clientRow) {
         clientRow = await axios
           .post(
             "https://api.botpress.cloud/v1/tables/UsersServicioTable/rows/find",
@@ -47,8 +48,10 @@ const handler = NextAuth({
       }
       console.log("obtenida informacion del usuario: ", clientRow);
 
-      clientRow.RefreshToken = token.refreshToken;
-      clientRow["Personal Access Token"] = token.accessToken;
+      if (assistantType === "Consumo") {
+        clientRow.RefreshToken = token.refreshToken;
+        clientRow["Personal Access Token"] = token.accessToken;
+      }
 
       session.userInfo = clientRow;
       session.assistantType = Object.keys(assistantType)
@@ -57,7 +60,7 @@ const handler = NextAuth({
 
       console.log("actualizando del usuario: ", session.user?.email);
       await axios.put(
-        "https://api.botpress.cloud/v1/tables/UsersConsumoTable/rows",
+        `https://api.botpress.cloud/v1/tables/${session.assistantType == "Consumo" ? "UsersConsumoTable" : "UsersServicioTable"}/rows`,
         { rows: [clientRow] },
         { headers: headersForBotpress },
       );
@@ -92,7 +95,7 @@ const handler = NextAuth({
           redirect_uri: process.env.AIRTABLE_REDIRECT_URI,
           scope:
             "data.records:read data.records:write schema.bases:read schema.bases:write",
-          code_challenge_method: "S256"
+          code_challenge_method: "S256",
         },
       },
       token: "https://api.airtable.com/oauth2/v1/token",
@@ -105,9 +108,11 @@ const handler = NextAuth({
           image: profile.picture,
         };
       },
-    }
+    },
   ],
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

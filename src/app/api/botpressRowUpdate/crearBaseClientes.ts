@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function crearBaseClientes(accessToken: string) {
+export async function crearBaseClientesGoogleSheets(accessToken: string) {
   return axios
     .post(
       "https://sheets.googleapis.com/v4/spreadsheets",
@@ -24,3 +24,4 @@ export default async function crearBaseClientes(accessToken: string) {
     )
     .then((res) => res.data.spreadsheetId);
 }
+
