@@ -141,7 +141,7 @@ export function Servicio({ userData }: { userData: userInfoServicio }) {
 
   useEffect(() => {
     setInputValue(regex.exec(userData.WorkspaceID)?.at(1) || "");
-  }, [userData]);
+  }, [userData, regex]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

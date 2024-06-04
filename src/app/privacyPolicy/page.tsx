@@ -5,7 +5,7 @@ export default function PrivacyPolicy() {
 
       <h2>1. Introducción</h2>
       <p>
-        En [Nombre de la Tienda] ("nosotros", "nuestro", "nos"), respetamos su
+        Respetamos su
         privacidad y estamos comprometidos a proteger sus datos personales. Esta
         Política de Privacidad describe cómo recopilamos, usamos y compartimos
         sus datos personales cuando utiliza nuestra integración con Airtable
@@ -114,24 +114,6 @@ export default function PrivacyPolicy() {
       </p>
 
       <h2>9. Contacto</h2>
-      <p>
-        Si tiene alguna pregunta o inquietud sobre esta Política de Privacidad o
-        sobre cómo manejamos sus datos personales, por favor contáctenos en:
-      </p>
-      <p>
-        [Nombre de la Tienda]
-        <br />
-        [Dirección]
-        <br />
-        [Correo Electrónico]
-        <br />
-        [Teléfono]
-      </p>
-
-      <p>
-        Esta Política de Privacidad entra en vigor a partir de [fecha de entrada
-        en vigor].
-      </p>
     </div>
   );
 }
