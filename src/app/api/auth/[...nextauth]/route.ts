@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { headersForBotpress } from "@/helpers/headersForBotpress";
 import type { AuthOptions } from "next-auth";
 
-export const NextAuthOptions: AuthOptions = {
+export const options: AuthOptions = {
   callbacks: {
     async jwt({ token, account }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
@@ -113,6 +113,6 @@ export const NextAuthOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-const handler = NextAuth(NextAuthOptions);
+const handler = NextAuth(options);
 
 export { handler as GET, handler as POST };
