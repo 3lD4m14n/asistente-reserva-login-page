@@ -2,7 +2,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { headersForBotpress } from "@/helpers/headersForBotpress";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { NextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 import QueryString from "qs";
 
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     grant_type: "authorization_code",
     code_verifier: cookiesStore.get("code_verifier")?.value,
   };
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(NextAuthOptions);
   const formattedData = QueryString.stringify(data);
 
   //nombre de la variable: access_token

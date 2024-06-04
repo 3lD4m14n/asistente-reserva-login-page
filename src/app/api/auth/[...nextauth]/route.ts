@@ -2,9 +2,9 @@ import axios from "axios";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { headersForBotpress } from "@/helpers/headersForBotpress";
-import type { NextAuthOptions } from "next-auth";
+import type { AuthOptions } from "next-auth";
 
-export const authOptions: NextAuthOptions = {
+export const NextAuthOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, account }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
@@ -113,6 +113,6 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-const handler = NextAuth(authOptions);
+const handler = NextAuth(NextAuthOptions);
 
 export { handler as GET, handler as POST };
