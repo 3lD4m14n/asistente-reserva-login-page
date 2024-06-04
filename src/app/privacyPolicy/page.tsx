@@ -113,7 +113,6 @@ export default function PrivacyPolicy() {
         registrados.
       </p>
 
-      <h2>9. Contacto</h2>
     </div>
   );
 }
