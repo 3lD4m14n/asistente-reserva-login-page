@@ -204,8 +204,8 @@ function createAsistantServicioInfo(data: Array<InputData>) {
   //recorrer el array de datos con su index y crear un objeto para cada asistente
   return data.map((asistente) => {
     return {
-      model: "gpt-3.5-turbo",
-      instructions: `# Rol\nEres el asistente de \"${asistente.nombreTienda}\", una ${asistente.rubro}. Tu tarea es gestionar las reservas de los clientes.\n\n# Reglas\n- Horario: ${asistente.horario}.\n- Comportamiento: ${asistente.comportamientoAsistente}.\n- No inventes nombres ni apellidos.\n- Solo agenda citas con empleados listados y dentro del horario de apertura.\n- Usa días de la semana en lugar de fechas para las funciones \"comprobar-fecha\" y \"agendar-cita\".\n- No menciones a los empleados en el saludo.\n- Necesitas el nombre del usuario para proceder.\n- Si el cliente solicita una reserva en un día de la semana, úsalo como parámetro en las funciones.\n- Las reservas deben ser a fechas futuras.\n- Si el usuario termina la conversación, usa la función \"terminar-conversacion\".\n\n# Secuencia de la conversación\n1. **Inicio**: Usa \"datos-iniciales\" para obtener la fecha y el estado de registro del usuario. Saluda al usuario y, si está registrado, pregúntale si quiere agendar el mismo servicio que la última vez. Si no está registrado, pide su nombre, regístralo con \"saveName\" y continua con el siguiente paso.\n2. **Confirmación del nombre**: Antes de proceder con la reserva, confirma con el usuario si la cita debe ser agendada a su nombre o a nombre de otra persona, debe ser un nombre propio.\n3. **Proceso**: Si el usuario quiere cancelar una cita, usa \"getReservations\" para mostrarle sus citas y \"cancelReservation\" para cancelar la seleccionada. Si no, pide el servicio requerido y usa \"getServices\" para seleccionarlo. Luego, comprueba la disponibilidad con \"comprobar-disponibilidad\" o \"comprobar-fecha\" y agenda la cita con \"agendar-cita\". Si no se puede agendar, vuelve a comprobar la disponibilidad.\n`,
+      model: "gpt-3.5-turbo-0125",
+      instructions: `# Rol\nEres el asistente de \"${asistente.nombreTienda}\", una ${asistente.rubro}. Tu tarea es gestionar las reservas de los clientes.\n\n# Reglas\n- Horario: ${asistente.horario}.\n- Comportamiento: ${asistente.comportamientoAsistente}.\n- No inventes nombres ni apellidos.\n- Solo agenda citas con empleados listados y dentro del horario de apertura.\n- Usa días de la semana en lugar de fechas para las funciones \"comprobar-fecha\" y \"agendar-cita\".\n- Necesitas el nombre del usuario para proceder.\n- Si el cliente solicita una reserva en un día de la semana, úsalo como parámetro en las funciones.\n\n# Secuencia de la conversación\n1. **Inicio**: Usa \"datos-iniciales\" para obtener la fecha y el estado de registro del usuario. Saluda al usuario y, si está registrado, pregúntale si quiere agendar el mismo servicio que la última vez. Si no está registrado, pide su nombre, regístralo con \"saveName\" y continua con el siguiente paso.\n2. **Proceso**: Si el usuario quiere cancelar una cita, usa \"getReservations\" para mostrarle sus citas y \"cancelReservation\" para cancelar la seleccionada. Si no, pide el servicio requerido y usa \"getServices\" para seleccionarlo. Luego, comprueba la disponibilidad con \"comprobar-disponibilidad\" o \"comprobar-fecha\" y agenda la cita con \"agendar-cita\". Si no se puede agendar, vuelve a comprobar la disponibilidad.\n`,
       tools: [
         {
           type: "function",
@@ -243,7 +243,7 @@ function createAsistantServicioInfo(data: Array<InputData>) {
           function: {
             name: "agendar-cita",
             description:
-              "funcion que permite agendar la cita que solicita el cliente, devuelve un codigo 200 si se pudo agendar y 409 si no pudo por un conflicto, antes de agendar verificar todos los datos necesarios, ningun parametro puede ser un string vacio",
+              "funcion que permite agendar la cita que solicita el cliente, devuelve un codigo 200 si se pudo agendar y 409 si no pudo por un conflicto, ningun parametro puede ser un string vacio",
             parameters: {
               type: "object",
               properties: {
@@ -307,8 +307,7 @@ function createAsistantServicioInfo(data: Array<InputData>) {
           type: "function",
           function: {
             name: "getEmpleados",
-            description:
-              "verifica la lista de empleados de la tienda, dedvuelve un array con los nombres de los empleados",
+            description: "devuelve un array con los nombres de los empleados",
             parameters: {
               type: "object",
               properties: {},
@@ -320,8 +319,7 @@ function createAsistantServicioInfo(data: Array<InputData>) {
           type: "function",
           function: {
             name: "saveName",
-            description:
-              "funcion que sirve para registrar a un cliente en el registro",
+            description: "registra a un cliente en el registro",
             parameters: {
               type: "object",
               properties: {
@@ -339,7 +337,7 @@ function createAsistantServicioInfo(data: Array<InputData>) {
           function: {
             name: "getServices",
             description:
-              "funcion que retorna un array de JSONs con los nombres de los servicios disponibles y sus respectivas duraciones en minutos",
+              "retorna un array con los nombres de los servicios disponibles y sus respectivas duraciones en minutos",
             parameters: {
               type: "object",
               properties: {},
@@ -352,7 +350,7 @@ function createAsistantServicioInfo(data: Array<InputData>) {
           function: {
             name: "getReservations",
             description:
-              "funcion que retorna un array de JSONs con los datos de las reservaciones del cliente actual",
+              "retorna un array de JSONs con los datos de las reservaciones del cliente actual",
             parameters: {
               type: "object",
               properties: {},
@@ -364,8 +362,7 @@ function createAsistantServicioInfo(data: Array<InputData>) {
           type: "function",
           function: {
             name: "cancelReservation",
-            description:
-              "funcion que recibe el id de una reservacion y la borra del registro",
+            description: "borra del registro una reservacion",
             parameters: {
               type: "object",
               properties: {
@@ -383,7 +380,7 @@ function createAsistantServicioInfo(data: Array<InputData>) {
           function: {
             name: "datos-iniciales",
             description:
-              "devuelve un JSON los datos que necesitas conocer para la conversacion",
+              "devuelve los datos que necesitas conocer para la conversacion",
             parameters: {
               type: "object",
               properties: {},
