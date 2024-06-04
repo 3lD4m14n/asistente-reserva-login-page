@@ -137,7 +137,7 @@ export function Consumo({ userData }: { userData: userInfoConsumo }) {
 export function Servicio({ userData }: { userData: userInfoServicio }) {
   const [inputValue, setInputValue] = useState("");
   const [isValid, setIsValid] = useState(true);
-  const regex = /(wsp\w+)([\?/].*)?/gm;
+  let regex = /(wsp\w+)([\?/].*)?/gm;
 
   useEffect(() => {
     setInputValue(regex.exec(userData.WorkspaceID)?.at(1) || "");

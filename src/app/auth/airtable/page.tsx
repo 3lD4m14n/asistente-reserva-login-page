@@ -28,7 +28,7 @@ export default function AirtableAuth({
       //redirect("/");
     };
     getTokens();
-  }, []);
+  }, [searchParams]);
 
   return (
     <>

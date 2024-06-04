@@ -3,6 +3,7 @@ import { UserSession } from "@/types";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { Consumo, Servicio } from "@/components/Forms";
+import Image from "next/image";
 
 export default function Home() {
   const datos = useSession();
@@ -18,7 +19,7 @@ export default function Home() {
         {session && session.user && session.user.image ? (
           <div className="flex flex-col">
             <div className="flex items-center">
-              <img
+              <Image
                 src={session.user.image}
                 alt="Profile"
                 className="w-12 h-12 rounded-full mr-4"
